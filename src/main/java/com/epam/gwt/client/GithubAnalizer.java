@@ -6,8 +6,10 @@ import com.epam.gwt.client.services.AccountService;
 import com.epam.gwt.client.services.InMemoryAccountService;
 import com.google.gwt.core.client.EntryPoint;
 import com.google.gwt.core.client.GWT;
+import com.google.gwt.http.client.*;
 import com.google.gwt.user.client.ui.*;
 
+import java.util.logging.Level;
 import java.util.logging.Logger;
 
 /**
@@ -37,6 +39,29 @@ public class GithubAnalizer implements EntryPoint {
         dialogBox.add(verticalPanel);
 
         //REST
+        RequestBuilder builder = new RequestBuilder(RequestBuilder.GET, "https://api.github.com/users");
+        builder.setHeader("Content-Type", "application/json;charset=utf-8");
+
+        try {
+            builder.sendRequest(null, new RequestCallback() {
+                @Override
+                public void onResponseReceived(Request request, Response response) {
+                    int statusCode = response.getStatusCode();
+                    if (statusCode == 200) {
+                        LOG.log(Level.INFO, response.getText());
+                    } else {
+                        LOG.log(Level.SEVERE, "Response error code: " + statusCode);
+                    }
+                }
+
+                @Override
+                public void onError(Request request, Throwable throwable) {
+                    LOG.log(Level.SEVERE, throwable.getMessage());
+                }
+            });
+        } catch (RequestException e) {
+            e.printStackTrace();
+        }
 
         loginButton.addClickHandler(clickEvent -> {
             boolean isLoggedIn = accountService.login(userNameField.getValue(), passwordField.getValue());
