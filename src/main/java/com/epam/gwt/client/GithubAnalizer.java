@@ -15,42 +15,46 @@ import java.util.logging.Logger;
  */
 public class GithubAnalizer implements EntryPoint {
 
-  private static final Logger LOG = Logger.getLogger("com.epam.gwt.client.GithubAnalizer");
+    private static final Logger LOG = Logger.getLogger("com.epam.gwt.client.GithubAnalizer");
 
-  private final GithubAnalyzerConstants constants = GWT.create(GithubAnalyzerConstants.class);
-  private final GithubAnalizerMessages messages = GWT.create(GithubAnalizerMessages.class);
-  private AccountService accountService = new InMemoryAccountService();
+    private final GithubAnalyzerConstants constants = GWT.create(GithubAnalyzerConstants.class);
+    private final GithubAnalizerMessages messages = GWT.create(GithubAnalizerMessages.class);
+    private AccountService accountService = new InMemoryAccountService();
 
-  public void onModuleLoad() {
-    TextBox userNameField = new TextBox();
-    PasswordTextBox passwordField = new PasswordTextBox();
-    Button loginButton = new Button(constants.loginButtonText());
+    public void onModuleLoad() {
+        TextBox userNameField = new TextBox();
+        PasswordTextBox passwordField = new PasswordTextBox();
+        Button loginButton = new Button(constants.loginButtonText());
 
-    VerticalPanel verticalPanel = new VerticalPanel();
-    verticalPanel.add(userNameField);
-    verticalPanel.add(passwordField);
-    verticalPanel.add(loginButton);
+        VerticalPanel verticalPanel = new VerticalPanel();
+        verticalPanel.add(userNameField);
+        verticalPanel.add(passwordField);
+        verticalPanel.add(loginButton);
 
-    DialogBox dialogBox = new DialogBox();
-    dialogBox.setText(constants.dialogBoxTitle());
-    dialogBox.setAnimationEnabled(true);
-    dialogBox.add(verticalPanel);
+        DialogBox dialogBox = new DialogBox();
+        dialogBox.setText(constants.dialogBoxTitle());
+        dialogBox.setAnimationEnabled(true);
+        dialogBox.add(verticalPanel);
 
-    loginButton.addClickHandler(clickEvent -> {
-      boolean isLoggedIn = accountService.login(userNameField.getValue(), passwordField.getValue());
-      if (isLoggedIn) {
-        dialogBox.hide();
-        LOG.info(messages.successfulLogin(userNameField.getValue()));
-      } else {
-        LOG.info("Logging in failed!");
-      }
+        //REST
 
-    });
+        loginButton.addClickHandler(clickEvent -> {
+            boolean isLoggedIn = accountService.login(userNameField.getValue(), passwordField.getValue());
+            if (isLoggedIn) {
+                dialogBox.hide();
+                RootPanel.get().remove(dialogBox);
+                LOG.info(messages.successfulLogin(userNameField.getValue()));
 
-    RootPanel.get().add(dialogBox);
+            } else {
+                LOG.info("Logging in failed!");
+            }
 
-    dialogBox.show();
-    dialogBox.center();
-  }
+        });
+
+        RootPanel.get().add(dialogBox);
+
+        dialogBox.show();
+        dialogBox.center();
+    }
 
 }
