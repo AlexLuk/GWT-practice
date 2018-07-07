@@ -2,10 +2,10 @@ package com.epam.gwt.client;
 
 import com.epam.gwt.client.i18n.GithubAnalizerMessages;
 import com.epam.gwt.client.i18n.GithubAnalyzerConstants;
+import com.epam.gwt.client.services.AccountService;
+import com.epam.gwt.client.services.InMemoryAccountService;
 import com.google.gwt.core.client.EntryPoint;
 import com.google.gwt.core.client.GWT;
-import com.google.gwt.logging.client.PopupLogHandler;
-import com.google.gwt.logging.client.SimpleRemoteLogHandler;
 import com.google.gwt.user.client.ui.*;
 
 import java.util.logging.Logger;
@@ -19,6 +19,7 @@ public class GithubAnalizer implements EntryPoint {
 
   private final GithubAnalyzerConstants constants = GWT.create(GithubAnalyzerConstants.class);
   private final GithubAnalizerMessages messages = GWT.create(GithubAnalizerMessages.class);
+  private AccountService accountService = new InMemoryAccountService();
 
   public void onModuleLoad() {
     TextBox userNameField = new TextBox();
@@ -36,9 +37,14 @@ public class GithubAnalizer implements EntryPoint {
     dialogBox.add(verticalPanel);
 
     loginButton.addClickHandler(clickEvent -> {
-      dialogBox.hide();
+      boolean isLoggedIn = accountService.login(userNameField.getValue(), passwordField.getValue());
+      if (isLoggedIn) {
+        dialogBox.hide();
+        LOG.info(messages.successfululLogin(userNameField.getValue()));
+      } else {
+        LOG.info("Logging in failed!");
+      }
 
-      LOG.info(messages.successfululLogin(userNameField.getValue()));
     });
 
     RootPanel.get().add(dialogBox);
