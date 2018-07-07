@@ -8,8 +8,10 @@
 <module rename-to='githubanalizer'>
   <!-- Inherit the core Web Toolkit stuff.                        -->
   <inherits name='com.google.gwt.user.User'/>
+    <inherits name="com.google.gwt.logging.Logging"/>
 
-  <!-- Inherit the default GWT style sheet.  You can change       -->
+
+    <!-- Inherit the default GWT style sheet.  You can change       -->
   <!-- the theme of your GWT application by uncommenting          -->
   <!-- any one of the following lines.                            -->
   <inherits name='com.google.gwt.user.theme.clean.Clean'/>
@@ -18,9 +20,10 @@
   <!-- <inherits name='com.google.gwt.user.theme.dark.Dark'/>     -->
 
   <!-- Other module inherits                                      -->
+    <extend-property name="locale" values="ru"/>
 
-  <!-- Specify the app entry point class.                         -->
-  <entry-point class='com.epam.gwt.client.GithubAnalizer'/>
+    <!-- Specify the app entry point class.                         -->
+    <entry-point class='com.epam.gwt.client.GithubAnalizer'/>
 
   <!-- Specify the paths for translatable code                    -->
   <source path='client'/>
