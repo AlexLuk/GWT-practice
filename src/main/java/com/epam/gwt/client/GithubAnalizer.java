@@ -40,7 +40,7 @@ public class GithubAnalizer implements EntryPoint {
       boolean isLoggedIn = accountService.login(userNameField.getValue(), passwordField.getValue());
       if (isLoggedIn) {
         dialogBox.hide();
-        LOG.info(messages.successfululLogin(userNameField.getValue()));
+        LOG.info(messages.successfulLogin(userNameField.getValue()));
       } else {
         LOG.info("Logging in failed!");
       }
